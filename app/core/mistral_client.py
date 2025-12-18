@@ -1,5 +1,5 @@
 import time
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Optional
 
 from mistralai.client import MistralClient
 from app.core.config import settings
@@ -16,16 +16,26 @@ class MistralService:
     """
 
     def __init__(self):
-        if not settings.MISTRAL_API_KEY:
-            raise RuntimeError("MISTRAL_API_KEY is not set")
+        self._client: Optional[MistralClient] = None
 
-        self.client = MistralClient(api_key=settings.MISTRAL_API_KEY)
+    def _get_client(self) -> MistralClient:
+        if not settings.MISTRAL_API_KEY:
+            raise RuntimeError(
+                "MISTRAL_API_KEY is not set. Please configure it via environment variables or .env file."
+            )
+
+        if self._client is None:
+            self._client = MistralClient(api_key=settings.MISTRAL_API_KEY)
+
+        return self._client
 
     def embed(self, texts: List[str]) -> List[List[float]]:
         """
         Generate embeddings for a list of texts.
         """
-        response = self.client.embeddings.create(
+        client = self._get_client()
+
+        response = client.embeddings.create(
             model=settings.EMBEDDING_MODEL,
             input=texts,
         )
@@ -41,6 +51,8 @@ class MistralService:
         """
         Generate chat completion with basic metrics.
         """
+        client = self._get_client()
+
         messages = [
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": user_prompt},
@@ -48,7 +60,7 @@ class MistralService:
 
         start = time.perf_counter()
 
-        response = self.client.chat.complete(
+        response = client.chat.complete(
             model=settings.CHAT_MODEL,
             messages=messages,
             temperature=temperature,
