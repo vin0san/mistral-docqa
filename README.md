@@ -111,7 +111,7 @@ Open Swagger UI:
 ---
 ## 📡 API Endpoints
 
-1. `POST /upload`
+### 1. `POST /upload`
 
 Upload and index a document.
 
@@ -127,7 +127,7 @@ Response:
 
 `{ "chunks_indexed": 12 }`
 
-2. `POST /ask`
+### 2. `POST /ask`
 
 Ask a question over the uploaded document.
 
@@ -149,7 +149,7 @@ Response:
   "usage": { ... }
 }
 ```
-3. `GET /metrics`
+### 3. `GET /metrics`
 
 Developer-facing metrics.
 
@@ -160,7 +160,7 @@ Developer-facing metrics.
   "avg_tokens": 210.4
 }
 ```
-4. `GET /health`
+### 4. `GET /health`
 
 Health check endpoint.
 
