@@ -1,0 +1,8 @@
+fastapi
+uvicorn
+python-dotenv
+mistralai
+faiss-cpu
+pydantic
+pytest
+pydantic-settings
